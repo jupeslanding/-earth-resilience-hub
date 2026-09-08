@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Earth Resilience Hub</title>
+
+  <!-- Leaflet GIS Mapping -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #07110f;
+      color: white;
+    }
+
+    header {
+      padding: 20px;
+      background: #0c1c18;
+      border-bottom: 1px solid #29443b;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #8fb6a7;
+    }
+
+    h1 {
+      margin: 5px 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      color: #a9bbb5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      height: calc(100vh - 105px);
+    }
+
+    aside {
+      padding: 20px;
+      background: #0a1714;
+      border-right: 1px solid #29443b;
+      overflow-y: auto;
+    }
+
+    h2 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #91aaa1;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0;
+      cursor: pointer;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mission {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #29443b;
+      color: #a9bbb5;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 700px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 230px 1fr;
+      }
+
+      aside {
+        border-right: none;
+        border-bottom: 1px solid #29443b;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+
+    <div class="eyebrow">
+      GLOBAL CLIMATE + CRISIS INTELLIGENCE
+    </div>
+
+    <h1>🌎 Earth Resilience Hub</h1>
+
+    <p>
+      Global GIS for climate resilience, environmental hazards,
+      and crisis response.
+    </p>
+
+  </header>
+
+  <div class="layout">
+
+    <aside>
+
+      <h2>Data Layers</h2>
+
+      <label>
+        <input type="checkbox" id="fires">
+        🔥 Active Fires
+      </label>
+
+      <label>
+        <input type="checkbox" id="population">
+        👥 Population
+      </label>
+
+      <label>
+        <input type="checkbox" id="floods">
+        🌊 Flood Risk
+      </label>
+
+      <label>
+        <input type="checkbox" id="heat">
+        🌡 Extreme Heat
+      </label>
+
+      <label>
+        <input type="checkbox" id="hurricanes">
+        🌀 Hurricanes
+      </label>
+
+      <div class="mission">
+
+        <h2>Mission</h2>
+
+        <p>
+          Earth Resilience Hub is an open GIS platform
+          designed to connect environmental hazards,
+          climate data, human vulnerability, and
+          crisis-response resources.
+        </p>
+
+        <p>
+          Our goal is to help communities understand
+          where climate hazards are occurring, who is
+          exposed, and where response resources are needed.
+        </p>
+
+      </div>
+
+    </aside>
+
+    <div id="map"></div>
+
+  </div>
+
+  <!-- Leaflet GIS Engine -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+  <script>
+
+    // Create the Earth map
+    const map = L.map('map').setView([20, 0], 2);
+
+    // OpenStreetMap base map
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; OpenStreetMap contributors'
+      }
+    ).addTo(map);
+
+    // Example locations
+    const locations = [
+      {
+        name: "Austin, Texas",
+        lat: 30.2672,
+        lon: -97.7431
+      },
+
+      {
+        name: "Houston, Texas",
+        lat: 29.7604,
+        lon: -95.3698
+      },
+
+      {
+        name: "Tokyo, Japan",
+        lat: 35.6762,
+        lon: 139.6503
+      },
+
+      {
+        name: "Cape Town, South Africa",
+        lat: -33.9249,
+        lon: 18.4241
+      }
+    ];
+
+    // Add example GIS points
+    locations.forEach(location => {
+
+      L.circleMarker(
+        [location.lat, location.lon],
+        {
+          radius: 7,
+          fillOpacity: 0.8
+        }
+      )
+      .bindPopup(
+        `<strong>${location.name}</strong><br>
+        Earth Resilience Hub`
+      )
+      .addTo(map);
+
+    });
+
+  </script>
+
+</body>
+</html>
