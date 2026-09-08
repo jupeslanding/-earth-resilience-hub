@@ -1,0 +1,73 @@
+name: Update NASA Fire Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-fires:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download NASA FIRMS fire data
+        env:
+          FIRMS_MAP_KEY: ${{ secrets.FIRMS_MAP_KEY }}
+        run: |
+          mkdir -p data
+
+          curl -L \
+            "https://firms.modaps.eosdis.nasa.gov/api/area/csv/${FIRMS_MAP_KEY}/VIIRS_NOAA21_NRT/world/1" \
+            -o data/fires.csv
+
+      - name: Convert CSV to GeoJSON
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+
+          features = []
+
+          with open("data/fires.csv", newline="", encoding="utf-8") as f:
+              for row in csv.DictReader(f):
+                  try:
+                      lon = float(row["longitude"])
+                      lat = float(row["latitude"])
+                  except:
+                      continue
+
+                  features.append({
+                      "type": "Feature",
+                      "geometry": {
+                          "type": "Point",
+                          "coordinates": [lon, lat]
+                      },
+                      "properties": row
+                  })
+
+          geojson = {
+              "type": "FeatureCollection",
+              "features": features
+          }
+
+          with open("data/fires.geojson", "w", encoding="utf-8") as f:
+              json.dump(geojson, f)
+
+          print(f"Created {len(features)} fire features.")
+          PY
+
+      - name: Commit updated fire data
+        run: |
+          git config user.name "Earth Resilience Hub"
+          git config user.email "actions@github.com"
+
+          git add data/fires.csv data/fires.geojson
+
+          git diff --cached --quiet || git commit -m "Update NASA fire data"
+          git push
