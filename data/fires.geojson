@@ -1,1 +1,1 @@
-{"type": "FeatureCollection", "features": []}
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-157.34203, -20.1545]}, "properties": {"latitude": "-20.1545", "longitude": "-157.34203", "bright_ti4": "336.2", "scan": "0.42", "track": "0.45", "acq_date": "2026-09-11", "acq_time": "30", "satellite": "N21", "instrument": "VIIRS", "confidence": "n", "version": "2.0NRT", "bright_ti5": "296.23", "frp": "2.87", "daynight": "D"}}]}
